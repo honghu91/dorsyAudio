@@ -1,4 +1,4 @@
 dorsyAudio
 ==========
 
-a audioContext lib,very easy to use 
+an audioContext lib,very easy to use 
