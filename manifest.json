@@ -9,8 +9,7 @@
   },
   "permissions": [
     "unlimitedStorage",
-  "http://*.google.com/",
-  "*"
+  "http://*.google.com/"
   ]
 }
 
