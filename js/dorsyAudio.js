@@ -12,6 +12,7 @@ var dorsyAudio = function(){
     /*
      * @description: just draw the audio graph
      * */
+        var FPS = 30;
         var P = {
             canvas: "",
             ctx: "",
@@ -32,6 +33,11 @@ var dorsyAudio = function(){
                 this.canvas = canvas;
                 this.ctx = canvas.getContext("2d");
                 this.msg = msg;
+                
+                var _this = this;
+                setInterval(function(){
+                   _this.setTimeline(SA.context.currentTime); 
+                },1000 / FPS);
 
                 this.attEvent();
             },
@@ -88,6 +94,16 @@ var dorsyAudio = function(){
             },
             showMsg: function(msg){
                 this.msg.innerHTML = msg;
+            },
+            setTimeline: function(time){
+            /*
+             * @info: set the timeline at a certain time
+             */
+                this.clearCanvas();
+                var offsetX = time / audioDuration * parseInt(this.canvas.width);
+                this.paintData[1][1] = offsetX;
+                this.draw();
+                this.showMsg(time.toFixed(2) + "s");
             }
         };
         return P;
@@ -100,6 +116,7 @@ var dorsyAudio = function(){
         var singleAudioObj = {
             url: url,
             buffer: null,
+            context: context,
             load: function(callBack){
                 var _this = this;
                 var request = new XMLHttpRequest();
@@ -158,13 +175,12 @@ var dorsyAudio = function(){
                 
             },
             draw: function(){
-                //var oscillator = context.createOscillator();
                 var data = this.buffer.getChannelData(0);
                 var painter = new Painter(this);
                 painter.init();
                 painter.drawAudioGraph(data);
                 painter.draw();
-  
+                DC.addWatch(context,"currentTime");
             }
         };
         return singleAudioObj;
@@ -208,9 +224,9 @@ var dorsyAudio = function(){
     return MutiAudio;
 };
 var b = new dorsyAudio();
-var a = new singleAudio('aspire.mp3');
-var c = new singleAudio('a.mp3');
+var a = new singleAudio('凤凰传奇 - 中国味道.mp3');
+//var c = new singleAudio('a.mp3');
 a.load();
-c.load();
+//c.load();
 //b.addTrack("a.mp3");
 //b.load();
